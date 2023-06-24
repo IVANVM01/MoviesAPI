@@ -1,44 +1,12 @@
 #  Dependences
-
 #Python
 from typing import Optional
-
 #Pydantic
 from pydantic import BaseModel, Field
-
-#FastAPI
-from fastapi import HTTPException, Request
-from fastapi.security import HTTPBearer
-
-#Own
-from jwt_manager import validate_token
-
 
 #  Models
 # Request Body & Validaciones
 # Utiliza la clase Field, la cual utiliza los mismos atributos tal como las clases Path, Query, Body
-
-class User(BaseModel):
-    email: str = Field(min_length=5,
-                       max_length=100,
-                       title="Email",
-                       description="This is the email"
-                )
-    password: str = Field(min_length=5,
-                          max_length=15,
-                          title="Password",
-                          description="This is the password"
-                )
-
-
-class JWTBearer(HTTPBearer):
-    async def __call__(self, request: Request):
-        auth = await super().__call__(request)
-        data = validate_token(auth.credentials)
-        if data['email'] != "admin@gmail.com":
-            return HTTPException(status_code=403, detail="Las credenciales son incorrectas.")
-
-
 class Movie(BaseModel):
     id: Optional[int] = None    #None indica que es opcional
     title: str = Field(min_length=5,
